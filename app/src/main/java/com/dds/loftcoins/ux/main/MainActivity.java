@@ -1,8 +1,10 @@
-package com.dds.loftcoins;
+package com.dds.loftcoins.ux.main;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.dds.loftcoins.R;
 
 public class MainActivity extends AppCompatActivity {
 
