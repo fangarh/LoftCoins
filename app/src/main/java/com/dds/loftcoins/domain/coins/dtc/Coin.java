@@ -33,16 +33,7 @@ public abstract class Coin {
     @AutoValue.CopyAnnotations
     public abstract int rank();
 
-    abstract Map<String, AutoValue_Coin_QuoteDTC> quote();
+    abstract Map<String, AutoValue_QuoteDTC> quote();
 
-    @AutoValue
-    abstract static class QuoteDTC {
-
-        public abstract double price();
-
-        @Json(name = "percent_change_24h")
-        @AutoValue.CopyAnnotations
-        public abstract double change24h();
-    }
 
 }
