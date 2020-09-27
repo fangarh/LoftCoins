@@ -26,9 +26,9 @@ public class RatesAdapter extends ListAdapter<Coin, RatesViewHolder> {
 
     private LayoutInflater inflater;
 
-    private int colorNegative = Color.RED;
+    private int negative = Color.RED;
 
-    private int colorPositive = Color.GREEN;
+    private int positive = Color.GREEN;
 
     RatesAdapter(Formatter<Double> priceFormatter) {
         super(new DiffUtil.ItemCallback<Coin>() {
@@ -64,9 +64,9 @@ public class RatesAdapter extends ListAdapter<Coin, RatesViewHolder> {
         holder.binding().price.setText(priceFormatter.format(coin.price()));
         holder.binding().change.setText(String.format(Locale.US, "%.2f%%", coin.change24h()));
         if (coin.change24h() > 0) {
-            holder.binding().change.setTextColor(colorPositive);
+            holder.binding().change.setTextColor(positive);
         } else {
-            holder.binding().change.setTextColor(colorNegative);
+            holder.binding().change.setTextColor(negative);
         }
         Picasso.get()
                 .load(BuildConfig.IMG_ENDPOINT + coin.id() + ".png")
@@ -80,8 +80,8 @@ public class RatesAdapter extends ListAdapter<Coin, RatesViewHolder> {
         inflater = LayoutInflater.from(context);
         TypedValue v = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.textNegative, v, true);
-        colorNegative = v.data;
+        negative = v.data;
         context.getTheme().resolveAttribute(R.attr.textPositive, v, true);
-        colorPositive = v.data;
+        positive = v.data;
     }
 }

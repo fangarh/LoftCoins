@@ -8,7 +8,8 @@
 
         <!-- Customize your theme here. -->
 
-
+        <item name="textNegative">@color/watermelon</item>
+        <item name="textPositive">@color/weird_green</item>
         <item name="colorPrimary">@color/dark_six</item>
         <item name="colorPrimaryDark">@color/grey_blue</item>
         <item name="colorPrimaryVariant">@color/dark_seven</item>
