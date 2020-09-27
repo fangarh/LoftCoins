@@ -7,7 +7,7 @@
         android:title="@string/wallets" />
     <item
         android:id="@+id/rates"
-        android:icon="@drawable/ic_wallet_card_24"
+        android:icon="@drawable/ic_rates_menu_24"
         android:title="@string/rates" />
     <item
         android:id="@+id/converter"
