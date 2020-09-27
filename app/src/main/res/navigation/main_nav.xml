@@ -19,4 +19,9 @@
         android:name="com.dds.loftcoins.ux.converter.ConverterFragment"
         android:label="@string/fragment_converter"
         tools:layout="@layout/fragment_converter"/>
+    <dialog
+        android:id="@+id/currency_dialog"
+        android:name="com.dds.loftcoins.ux.currency.CurrencyDialog"
+        android:label="CurrencyDialog"
+        tools:layout="@layout/dialog_currency" />
 </navigation>

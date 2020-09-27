@@ -13,5 +13,12 @@
     <string name="fragment_wallets">Кошельки</string>
     <string name="fragment_rates">Курсы</string>
     <string name="fragment_converter">Конвертатор</string>
+    <string name="choose_currency">Выбор валюты</string>
+    <string name="sort">Сортировать</string>
+    <string name="usd">Доллар</string>
+    <string name="eur">Евро</string>
+    <string name="rub">Pубль</string>
+    <string name="wallets">Кошельки</string>
+    <string name="rates">Курсы</string>
 
 </resources>

@@ -1,12 +1,20 @@
 <resources>
     <!-- Base application theme. -->
+
+    <attr name="textNegative" format="color|reference" />
+    <attr name="textPositive" format="color|reference" />
+
     <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+
         <!-- Customize your theme here. -->
+
+
         <item name="colorPrimary">@color/dark_six</item>
         <item name="colorPrimaryDark">@color/grey_blue</item>
         <item name="colorPrimaryVariant">@color/dark_seven</item>
         <item name="colorAccent">?attr/colorPrimary</item>
         <item name="colorOnSurface">@color/slate</item>
+
 
         <item name="buttonWelcome">@style/Widget.AppTheme.Button.Welcome</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.AppTheme.H1</item>
