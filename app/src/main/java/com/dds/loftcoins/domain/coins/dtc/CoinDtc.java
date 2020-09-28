@@ -11,9 +11,7 @@ import java.util.Map;
 
 @AutoValue
 public abstract class CoinDtc implements ICoin {
-
-
-   @Memoized
+    @Memoized
     @Override
     public double price() {
         final Iterator<? extends Quote> iterator = quote().values().iterator();
@@ -38,4 +36,5 @@ public abstract class CoinDtc implements ICoin {
     public abstract String currencyCode();
 
     public abstract Map<String, AutoValue_Quote> quote();
+
 }

@@ -29,14 +29,8 @@ public class RatesViewModel extends ViewModel {
 
     private int sortingIndex = 1;
 
-    // AppComponent(BaseComponent) -> MainComponent -> Fragment(BaseComponent) -> RatesComponent -> RatesViewModel()
-
     @Inject
     public RatesViewModel(CmcCoinsRepository coinsRepo, ICurrencyRepository currencyRepo) {
-        //    t           f            f          f         f          t
-        // (f|t) -> forceRefresh -> currency -> sortBy -> query -> listings
-        // USD -> RUB -> USD -> USD -> USD -> EUR -> EUR
-        // Transformations.distinctUntilChanged()
         final LiveData<Query> query = Transformations.switchMap(forceRefresh, (r) -> {
             return Transformations.switchMap(currencyRepo.currency(), (c) -> {
                 r.set(true);
