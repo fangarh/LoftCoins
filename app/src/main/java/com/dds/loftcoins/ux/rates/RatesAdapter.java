@@ -14,35 +14,51 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dds.loftcoins.BuildConfig;
 import com.dds.loftcoins.R;
 import com.dds.loftcoins.databinding.LiRateBinding;
-import com.dds.loftcoins.domain.coins.dtc.Coin;
-import com.dds.loftcoins.utils.Formatter;
-import com.squareup.picasso.Picasso;
+import com.dds.loftcoins.domain.coins.dtc.ICoin;
+import com.dds.loftcoins.utils.formatters.PercentFormatter;
+import com.dds.loftcoins.utils.formatters.PriceFormatter;
+import com.dds.loftcoins.utils.helpers.IImageLoader;
 
-import java.util.Locale;
+import java.util.List;
 import java.util.Objects;
 
-public class RatesAdapter extends ListAdapter<Coin, RatesViewHolder> {
-    private final Formatter<Double> priceFormatter;
+import javax.inject.Inject;
+
+public class RatesAdapter extends ListAdapter<ICoin, RatesViewHolder> {
+
+    private final PriceFormatter priceFormatter;
+
+    private final PercentFormatter percentFormatter;
+
+    private final IImageLoader imageLoader;
 
     private LayoutInflater inflater;
 
-    private int negative = Color.RED;
+    private int colorNegative = Color.RED;
 
-    private int positive = Color.GREEN;
+    private int colorPositive = Color.GREEN;
 
-    RatesAdapter(Formatter<Double> priceFormatter) {
-        super(new DiffUtil.ItemCallback<Coin>() {
+    @Inject
+    RatesAdapter(PriceFormatter priceFormatter, PercentFormatter percentFormatter, IImageLoader imageLoader) {
+        super(new DiffUtil.ItemCallback<ICoin>() {
             @Override
-            public boolean areItemsTheSame(@NonNull Coin oldItem, @NonNull Coin newItem) {
+            public boolean areItemsTheSame(@NonNull ICoin oldItem, @NonNull ICoin newItem) {
                 return oldItem.id() == newItem.id();
             }
 
             @Override
-            public boolean areContentsTheSame(@NonNull Coin oldItem, @NonNull Coin newItem) {
+            public boolean areContentsTheSame(@NonNull ICoin oldItem, @NonNull ICoin newItem) {
                 return Objects.equals(oldItem, newItem);
+            }
+
+            @Override
+            public Object getChangePayload(@NonNull ICoin oldItem, @NonNull ICoin newItem) {
+                return newItem;
             }
         });
         this.priceFormatter = priceFormatter;
+        this.percentFormatter = percentFormatter;
+        this.imageLoader = imageLoader;
         setHasStableIds(true);
     }
 
@@ -59,18 +75,29 @@ public class RatesAdapter extends ListAdapter<Coin, RatesViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RatesViewHolder holder, int position) {
-        final Coin coin = getItem(position);
+        final ICoin coin = getItem(position);
         holder.binding().symbol.setText(coin.symbol());
-        holder.binding().price.setText(priceFormatter.format(coin.price()));
-        holder.binding().change.setText(String.format(Locale.US, "%.2f%%", coin.change24h()));
+        holder.binding().price.setText(priceFormatter.format(coin.currencyCode(), coin.price()));
+        holder.binding().change.setText(percentFormatter.format(coin.change24h()));
         if (coin.change24h() > 0) {
-            holder.binding().change.setTextColor(positive);
+            holder.binding().change.setTextColor(colorPositive);
         } else {
-            holder.binding().change.setTextColor(negative);
+            holder.binding().change.setTextColor(colorNegative);
         }
-        Picasso.get()
+        imageLoader
                 .load(BuildConfig.IMG_ENDPOINT + coin.id() + ".png")
                 .into(holder.binding().logo);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RatesViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        } else {
+            final ICoin coin = (ICoin) payloads.get(0);
+            holder.binding().price.setText(priceFormatter.format(coin.currencyCode(), coin.price()));
+            holder.binding().change.setText(percentFormatter.format(coin.change24h()));
+        }
     }
 
     @Override
@@ -80,8 +107,8 @@ public class RatesAdapter extends ListAdapter<Coin, RatesViewHolder> {
         inflater = LayoutInflater.from(context);
         TypedValue v = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.textNegative, v, true);
-        negative = v.data;
+        colorNegative = v.data;
         context.getTheme().resolveAttribute(R.attr.textPositive, v, true);
-        positive = v.data;
+        colorPositive = v.data;
     }
 }

@@ -8,5 +8,5 @@ public interface ICmcApi {
     String API_KEY = "X-CMC_PRO_API_KEY";
 
     @GET("cryptocurrency/listings/latest")
-    Call<CoinsListingDTC> GetCoinsListings(@Query("convert") String convert);
+    Call<CoinsListing> GetCoinsListings(@Query("convert") String convert);
 }

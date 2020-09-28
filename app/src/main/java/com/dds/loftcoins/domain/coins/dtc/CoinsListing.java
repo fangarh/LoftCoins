@@ -5,7 +5,7 @@ import com.google.auto.value.AutoValue;
 import java.util.List;
 
 @AutoValue
-public abstract class CoinsListingDTC {
+public abstract class CoinsListing {
 
-    abstract List<AutoValue_Coin> data();
+    abstract List<AutoValue_CoinDtc> data();
 }

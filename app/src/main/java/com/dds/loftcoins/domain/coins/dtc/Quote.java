@@ -5,7 +5,7 @@ import com.google.auto.value.AutoValue;
 import com.squareup.moshi.Json;
 
 @AutoValue
-public abstract class QuoteDTC {
+public abstract class Quote {
 
     public abstract double price();
 

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.os.StrictMode;
 
 public class LoftCoins extends Application {
+    private BaseComponent component;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -11,5 +13,12 @@ public class LoftCoins extends Application {
         if(BuildConfig.DEBUG){
             StrictMode.enableDefaults();
         }
+        component = DaggerAppComponent.builder()
+                .application(this)
+                .build();
+    }
+
+    public BaseComponent getComponent() {
+        return component;
     }
 }
