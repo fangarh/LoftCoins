@@ -2,7 +2,7 @@ package com.dds.loftcoins;
 
 import android.app.Application;
 
-import com.dds.loftcoins.domain.coins.dtc.DataModule;
+import com.dds.loftcoins.domain.coins.DataModule;
 import com.dds.loftcoins.utils.UtilModule;
 
 import javax.inject.Singleton;

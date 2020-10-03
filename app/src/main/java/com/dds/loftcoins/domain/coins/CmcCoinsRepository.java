@@ -1,4 +1,4 @@
-package com.dds.loftcoins.domain.coins.dtc;
+package com.dds.loftcoins.domain.coins;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -17,13 +17,15 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 @Singleton
-public class CmcCoinsRepository implements ICoinsRepository {
+class CmcCoinsRepository implements ICoinsRepository{
     private final ICmcApi api;
-    private final DatabaseAdapter db;
+
+    private final CoinsDataBase db;
+
     private final ExecutorService executor;
 
     @Inject
-    public CmcCoinsRepository(ICmcApi api, DatabaseAdapter db, ExecutorService executor) {
+    public CmcCoinsRepository(ICmcApi api, CoinsDataBase db, ExecutorService executor) {
         this.api = api;
         this.db = db;
         this.executor = executor;
@@ -31,7 +33,7 @@ public class CmcCoinsRepository implements ICoinsRepository {
 
     @NonNull
     @Override
-    public LiveData<List<ICoin>> GetCoinsRates(@NonNull Query query) {
+    public LiveData<List<ICoin>> listings(@NonNull Query query) {
         fetchFromNetworkIfNecessary(query);
         return fetchFromDb(query);
     }
@@ -44,16 +46,15 @@ public class CmcCoinsRepository implements ICoinsRepository {
             coins = db.coins().fetchAllSortByRank();
         }
         return Transformations.map(coins, ArrayList::new);
-
     }
 
     private void fetchFromNetworkIfNecessary(Query query) {
         executor.submit(() -> {
             if (query.forceUpdate() || db.coins().coinsCount() == 0) {
                 try {
-                    final Response<CoinsListingDTC> response = api.GetCoinsListings(query.currency()).execute();
+                    final Response<Listing> response = api.listing(query.currency()).execute();
                     if (response.isSuccessful()) {
-                        final CoinsListingDTC listings = response.body();
+                        final Listing listings = response.body();
                         if (listings != null) {
                             saveCoinsIntoDb(query, listings.data());
                         }
@@ -85,5 +86,4 @@ public class CmcCoinsRepository implements ICoinsRepository {
         }
         db.coins().insert(roomCoins);
     }
-
 }

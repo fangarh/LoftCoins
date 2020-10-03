@@ -1,4 +1,4 @@
-package com.dds.loftcoins.domain.coins.dtc;
+package com.dds.loftcoins.domain.coins;
 
 import android.content.Context;
 
@@ -18,14 +18,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 @Module
-public abstract class DataModule {
-
+public abstract class DataModule  {
     @Provides
     static Moshi moshi() {
         final Moshi moshi = new Moshi.Builder().build();
         return moshi.newBuilder()
-                .add(ICoin.class, moshi.adapter(AutoValue_CoinDtc.class))
-                .add(CoinsListingDTC.class, moshi.adapter(AutoValue_CoinsListingDTC.class))
+                .add(ICoin.class, moshi.adapter(AutoValue_CmcCoin.class))
+                .add(Listing.class, moshi.adapter(AutoValue_Listing.class))
                 .build();
     }
 
@@ -52,11 +51,11 @@ public abstract class DataModule {
 
     @Provides
     @Singleton
-    static DatabaseAdapter loftDatabase(Context context) {
+    static CoinsDataBase loftDatabase(Context context) {
         if (BuildConfig.DEBUG) {
-            return Room.inMemoryDatabaseBuilder(context, DatabaseAdapter.class).build();
+            return Room.inMemoryDatabaseBuilder(context, CoinsDataBase.class).build();
         } else {
-            return Room.databaseBuilder(context, DatabaseAdapter.class, "loft.db").build();
+            return Room.databaseBuilder(context, CoinsDataBase.class, "loft.db").build();
         }
     }
 
@@ -65,5 +64,4 @@ public abstract class DataModule {
 
     @Binds
     abstract ICurrencyRepository currencyRepo(CurrencyRepository impl);
-
 }

@@ -90,4 +90,5 @@ public class RatesFragment extends Fragment {
         binding.recycler.setAdapter(null);
         super.onDestroyView();
     }
+
 }

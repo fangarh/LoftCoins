@@ -1,8 +1,5 @@
 package com.dds.loftcoins.utils;
 
-import com.dds.loftcoins.utils.helpers.IImageLoader;
-import com.dds.loftcoins.utils.helpers.PicassoImageLoader;
-
 import dagger.Binds;
 import dagger.Module;
 
@@ -13,3 +10,4 @@ public abstract class UtilModule {
     abstract IImageLoader imageLoader(PicassoImageLoader impl);
 
 }
+

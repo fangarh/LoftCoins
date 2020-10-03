@@ -11,8 +11,7 @@ import javax.inject.Provider;
 
 import timber.log.Timber;
 
-public class AppFragmentFactory  extends FragmentFactory {
-
+public class AppFragmentFactory extends FragmentFactory {
     private final Map<Class<?>, Provider<Fragment>> providers;
 
     @Inject
@@ -34,5 +33,4 @@ public class AppFragmentFactory  extends FragmentFactory {
         }
         return super.instantiate(classLoader, className);
     }
-
 }

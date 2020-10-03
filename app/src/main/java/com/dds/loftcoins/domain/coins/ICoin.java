@@ -1,4 +1,4 @@
-package com.dds.loftcoins.domain.coins.dtc;
+package com.dds.loftcoins.domain.coins;
 
 public interface ICoin {
     int id();

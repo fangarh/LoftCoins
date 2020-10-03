@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.dds.loftcoins.domain.coins.dtc.Currency;
-import com.dds.loftcoins.domain.coins.dtc.ICurrencyRepository;
+import com.dds.loftcoins.domain.coins.Currency;
+import com.dds.loftcoins.domain.coins.ICurrencyRepository;
 
 import java.util.List;
 

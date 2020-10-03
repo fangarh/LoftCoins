@@ -1,4 +1,4 @@
-package com.dds.loftcoins.domain.coins.dtc;
+package com.dds.loftcoins.domain.coins;
 
 import androidx.annotation.NonNull;
 
@@ -6,7 +6,6 @@ import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class Currency {
-
     @NonNull
     static Currency create(String symbol, String code, String name) {
         return new AutoValue_Currency(symbol, code, name);
@@ -17,5 +16,4 @@ public abstract class Currency {
     public abstract String code();
 
     public abstract String name();
-
 }

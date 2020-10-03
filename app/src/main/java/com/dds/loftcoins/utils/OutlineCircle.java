@@ -1,4 +1,4 @@
-package com.dds.loftcoins.utils.view;
+package com.dds.loftcoins.utils;
 
 import android.graphics.Outline;
 import android.view.View;

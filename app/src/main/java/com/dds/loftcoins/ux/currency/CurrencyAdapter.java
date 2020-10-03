@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dds.loftcoins.databinding.LiCurrencyBinding;
-import com.dds.loftcoins.domain.coins.dtc.Currency;
+import com.dds.loftcoins.domain.coins.Currency;
 
 import java.util.Objects;
 
@@ -47,6 +47,7 @@ public class CurrencyAdapter  extends ListAdapter<Currency, CurrencyAdapter.View
         final Currency currency = getItem(position);
         holder.binding.name.setText(currency.name());
         holder.binding.symbol.setText(currency.symbol());
+
     }
 
     @Override

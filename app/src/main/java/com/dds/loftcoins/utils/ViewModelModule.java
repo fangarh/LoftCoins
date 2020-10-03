@@ -1,4 +1,4 @@
-package com.dds.loftcoins.utils.view;
+package com.dds.loftcoins.utils;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -7,8 +7,6 @@ import dagger.Module;
 
 @Module
 public abstract class ViewModelModule {
-
     @Binds
     abstract ViewModelProvider.Factory viewModelFactory(ViewModelFactory impl);
-
 }

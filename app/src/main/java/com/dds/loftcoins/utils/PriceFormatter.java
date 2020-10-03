@@ -1,4 +1,4 @@
-package com.dds.loftcoins.utils.formatters;
+package com.dds.loftcoins.utils;
 
 import android.content.Context;
 
@@ -6,13 +6,17 @@ import androidx.annotation.NonNull;
 import androidx.core.os.ConfigurationCompat;
 import androidx.core.os.LocaleListCompat;
 
+import com.dds.loftcoins.utils.helpers.Formatter;
+
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class PriceFormatter implements Formatter<Double> {
 
     private static final Map<String, Locale> LOCALES = new HashMap<>();

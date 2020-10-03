@@ -1,4 +1,4 @@
-package com.dds.loftcoins.domain.coins.dtc;
+package com.dds.loftcoins.domain.coins;
 
 import androidx.annotation.Nullable;
 
@@ -10,7 +10,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 @AutoValue
-public abstract class CoinDtc implements ICoin {
+public abstract class CmcCoin implements ICoin {
+
     @Memoized
     @Override
     public double price() {
@@ -35,6 +36,16 @@ public abstract class CoinDtc implements ICoin {
     @Nullable
     public abstract String currencyCode();
 
-    public abstract Map<String, AutoValue_Quote> quote();
+    abstract Map<String, AutoValue_CmcCoin_Quote> quote();
+
+    @AutoValue
+    abstract static class Quote {
+        public abstract double price();
+
+        @Json(name = "percent_change_24h")
+        @AutoValue.CopyAnnotations
+        public abstract double change24h();
+    }
 
 }
+

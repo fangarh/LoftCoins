@@ -1,4 +1,4 @@
-package com.dds.loftcoins.domain.coins.dtc;
+package com.dds.loftcoins.domain.coins;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -7,7 +7,7 @@ import com.google.auto.value.AutoValue;
 
 @Entity
 @AutoValue
-abstract class RoomCoin implements ICoin {
+abstract class RoomCoin implements ICoin  {
     static RoomCoin create(String name,
                            String symbol,
                            int rank,

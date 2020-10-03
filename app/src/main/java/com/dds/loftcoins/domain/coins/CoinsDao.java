@@ -1,4 +1,4 @@
-package com.dds.loftcoins.domain.coins.dtc;
+package com.dds.loftcoins.domain.coins;
 
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
@@ -11,14 +11,13 @@ import java.util.List;
 
 @Dao
 abstract class CoinsDao {
-
-    @androidx.room.Query("SELECT * FROM RoomCoin")
+    @Query("SELECT * FROM RoomCoin")
     abstract LiveData<List<RoomCoin>> fetchAll();
 
-    @androidx.room.Query("SELECT * FROM RoomCoin ORDER BY price DESC")
+    @Query("SELECT * FROM RoomCoin ORDER BY price DESC")
     abstract LiveData<List<RoomCoin>> fetchAllSortByPrice();
 
-    @androidx.room.Query("SELECT * FROM RoomCoin ORDER BY rank ASC")
+    @Query("SELECT * FROM RoomCoin ORDER BY rank ASC")
     abstract LiveData<List<RoomCoin>> fetchAllSortByRank();
 
     @WorkerThread
@@ -27,5 +26,4 @@ abstract class CoinsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void insert(List<RoomCoin> coins);
-
 }

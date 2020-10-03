@@ -5,7 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.net.TrafficStats;
 
-import com.dds.loftcoins.domain.coins.dtc.ICmcApi;
+import com.dds.loftcoins.domain.coins.ICmcApi;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 

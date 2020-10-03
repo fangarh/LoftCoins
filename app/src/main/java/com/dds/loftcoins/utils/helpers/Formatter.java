@@ -1,4 +1,4 @@
-package com.dds.loftcoins.utils.formatters;
+package com.dds.loftcoins.utils.helpers;
 
 import androidx.annotation.NonNull;
 

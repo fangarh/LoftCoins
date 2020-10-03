@@ -3,7 +3,7 @@ package com.dds.loftcoins.ux.currency;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dds.loftcoins.BaseComponent;
-import com.dds.loftcoins.utils.view.ViewModelModule;
+import com.dds.loftcoins.utils.ViewModelModule;
 
 import javax.inject.Singleton;
 
@@ -17,7 +17,5 @@ import dagger.Component;
         BaseComponent.class
 })
 abstract class CurrencyComponent {
-
     abstract ViewModelProvider.Factory viewModelFactory();
-
 }

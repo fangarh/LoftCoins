@@ -20,7 +20,7 @@ import javax.inject.Inject;
 
 public class CurrencyDialog extends AppCompatDialogFragment {
 
-    private final CurrencyComponent component;
+   private final CurrencyComponent component;
 
     private DialogCurrencyBinding binding;
 
