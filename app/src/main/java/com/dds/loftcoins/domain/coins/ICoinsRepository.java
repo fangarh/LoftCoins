@@ -1,15 +1,26 @@
 package com.dds.loftcoins.domain.coins;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 
 import com.google.auto.value.AutoValue;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
+
 public interface ICoinsRepository {
     @NonNull
-    LiveData<List<ICoin>> listings(@NonNull Query query);
+    Observable<List<ICoin>> listings(@NonNull Query query);
+
+    @NonNull
+    Single<ICoin> coin(@NonNull Currency currency, long id);
+
+    @NonNull
+    Single<ICoin> nextPopularCoin(@NonNull Currency currency, List<Integer> ids);
+
+    @NonNull
+    Observable<List<ICoin>> topCoins(@NonNull Currency currency);
 
     @AutoValue
     abstract class Query {
@@ -17,7 +28,8 @@ public interface ICoinsRepository {
         @NonNull
         public static Builder builder() {
             return new AutoValue_ICoinsRepository_Query.Builder()
-                    .forceUpdate(true);
+                    .forceUpdate(true)
+                    .sortBy(SortBy.RANK);
         }
 
         abstract String currency();

@@ -1,79 +1,85 @@
 package com.dds.loftcoins.domain.coins;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 
-import java.io.IOException;
+import com.dds.loftcoins.utils.IRxSchedulers;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import okhttp3.ResponseBody;
-import retrofit2.Response;
-import timber.log.Timber;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 
 @Singleton
-class CmcCoinsRepository implements ICoinsRepository{
+public class CmcCoinsRepository implements ICoinsRepository{
     private final ICmcApi api;
 
     private final CoinsDataBase db;
 
-    private final ExecutorService executor;
+    private final IRxSchedulers schedulers;
 
     @Inject
-    public CmcCoinsRepository(ICmcApi api, CoinsDataBase db, ExecutorService executor) {
+    public CmcCoinsRepository(ICmcApi api, CoinsDataBase db, IRxSchedulers schedulers) {
         this.api = api;
         this.db = db;
-        this.executor = executor;
+        this.schedulers = schedulers;
     }
 
     @NonNull
     @Override
-    public LiveData<List<ICoin>> listings(@NonNull Query query) {
-        fetchFromNetworkIfNecessary(query);
-        return fetchFromDb(query);
+    public Observable<List<ICoin>> listings(@NonNull Query query) {
+        return Observable
+                .fromCallable(() -> query.forceUpdate() || db.coins().coinsCount() == 0)
+                .switchMap((f) -> f ? api.listing(query.currency()) : Observable.empty())
+                .map((listings) -> mapToRoomCoins(query, listings.data()))
+                .doOnNext((coins) -> db.coins().insert(coins))
+                .switchMap((coins) -> fetchFromDb(query))
+                .switchIfEmpty(fetchFromDb(query))
+                .<List<ICoin>>map(Collections::unmodifiableList)
+                .subscribeOn(schedulers.io());
     }
 
-    private LiveData<List<ICoin>> fetchFromDb(Query query) {
-        LiveData<List<RoomCoin>> coins;
+    @NonNull
+    @Override
+    public Single<ICoin> coin(@NonNull Currency currency, long id) {
+        return listings(Query.builder().currency(currency.code()).forceUpdate(false).build())
+                .switchMapSingle((coins) -> db.coins().fetchOne(id))
+                .firstOrError()
+                .map((coin) -> coin);
+    }
+
+    @NonNull
+    @Override
+    public Single<ICoin> nextPopularCoin(@NonNull Currency currency, List<Integer> ids) {
+        return listings(Query.builder().currency(currency.code()).forceUpdate(false).build())
+                .switchMapSingle((coins) -> db.coins().nextPopularCoin(ids))
+                .firstOrError()
+                .map((coin) -> coin);
+    }
+
+    @NonNull
+    @Override
+    public Observable<List<ICoin>> topCoins(@NonNull Currency currency) {
+        return listings(Query.builder().currency(currency.code()).forceUpdate(false).build())
+                .switchMap((coins) -> db.coins().fetchTop(3))
+                .<List<ICoin>>map(Collections::unmodifiableList);
+    }
+
+    private Observable<List<RoomCoin>> fetchFromDb(Query query) {
         if (query.sortBy() == SortBy.PRICE) {
-            coins = db.coins().fetchAllSortByPrice();
+            return db.coins().fetchAllSortByPrice();
         } else {
-            coins = db.coins().fetchAllSortByRank();
+            return db.coins().fetchAllSortByRank();
         }
-        return Transformations.map(coins, ArrayList::new);
     }
 
-    private void fetchFromNetworkIfNecessary(Query query) {
-        executor.submit(() -> {
-            if (query.forceUpdate() || db.coins().coinsCount() == 0) {
-                try {
-                    final Response<Listing> response = api.listing(query.currency()).execute();
-                    if (response.isSuccessful()) {
-                        final Listing listings = response.body();
-                        if (listings != null) {
-                            saveCoinsIntoDb(query, listings.data());
-                        }
-                    } else {
-                        final ResponseBody responseBody = response.errorBody();
-                        if (responseBody != null) {
-                            throw new IOException(responseBody.string());
-                        }
-                    }
-                } catch (IOException e) {
-                    Timber.e(e);
-                }
-            }
-        });
-    }
-
-    private void saveCoinsIntoDb(Query query, List<? extends ICoin> coins) {
-        List<RoomCoin> roomCoins = new ArrayList<>(coins.size());
-        for (ICoin coin : coins) {
+    private List<RoomCoin> mapToRoomCoins(Query query, List<? extends ICoin> data) {
+        List<RoomCoin> roomCoins = new ArrayList<>(data.size());
+        for (ICoin coin : data) {
             roomCoins.add(RoomCoin.create(
                     coin.name(),
                     coin.symbol(),
@@ -84,6 +90,6 @@ class CmcCoinsRepository implements ICoinsRepository{
                     coin.id()
             ));
         }
-        db.coins().insert(roomCoins);
+        return roomCoins;
     }
 }

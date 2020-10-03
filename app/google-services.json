@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "943462482271",
+    "firebase_url": "https://lctest-3eb5a.firebaseio.com",
+    "project_id": "lctest-3eb5a",
+    "storage_bucket": "lctest-3eb5a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943462482271:android:8dc3b979c22665235176ea",
+        "android_client_info": {
+          "package_name": "com.dds.loftcoin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943462482271-qmonv8eiccg6gsqcvvap7lb89t2pfcqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyblkrp1ELFFk3PP2WHdbTiNAiH43_I0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943462482271-qmonv8eiccg6gsqcvvap7lb89t2pfcqt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

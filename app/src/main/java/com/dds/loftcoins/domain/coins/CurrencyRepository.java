@@ -18,6 +18,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Observable;
+
 @Singleton
 class CurrencyRepository implements ICurrencyRepository {
     private static final String KEY_CURRENCY = "currency";
@@ -44,8 +46,17 @@ class CurrencyRepository implements ICurrencyRepository {
 
     @NonNull
     @Override
-    public LiveData<Currency> currency() {
-        return new CurrencyLiveData();
+    public Observable<Currency> currency() {
+        return Observable.create(emitter -> {
+            SharedPreferences.OnSharedPreferenceChangeListener listener = (prefs, key) -> {
+                if (!emitter.isDisposed()) {
+                    emitter.onNext(availableCurrencies.get(prefs.getString(key, "USD")));
+                }
+            };
+            prefs.registerOnSharedPreferenceChangeListener(listener);
+            emitter.setCancellable(() -> prefs.unregisterOnSharedPreferenceChangeListener(listener));
+            emitter.onNext(availableCurrencies.get(prefs.getString(KEY_CURRENCY, "USD")));
+        });
     }
 
     @Override
@@ -53,23 +64,5 @@ class CurrencyRepository implements ICurrencyRepository {
         prefs.edit().putString(KEY_CURRENCY, currency.code()).apply();
     }
 
-    private class CurrencyLiveData extends LiveData<Currency> implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-        @Override
-        protected void onActive() {
-            prefs.registerOnSharedPreferenceChangeListener(this);
-            setValue(availableCurrencies.get(prefs.getString(KEY_CURRENCY, "USD")));
-        }
-
-        @Override
-        protected void onInactive() {
-            prefs.unregisterOnSharedPreferenceChangeListener(this);
-        }
-
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-            setValue(availableCurrencies.get(prefs.getString(key, "USD")));
-        }
-    }
 
 }
