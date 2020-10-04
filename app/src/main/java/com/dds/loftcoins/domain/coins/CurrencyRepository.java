@@ -21,7 +21,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 
 @Singleton
-class CurrencyRepository implements ICurrencyRepository {
+public class CurrencyRepository implements ICurrencyRepository {
     private static final String KEY_CURRENCY = "currency";
 
     private final Map<String, Currency> availableCurrencies = new HashMap<>();
@@ -29,7 +29,7 @@ class CurrencyRepository implements ICurrencyRepository {
     private SharedPreferences prefs;
 
     @Inject
-    CurrencyRepository(@NonNull Context context) {
+    public CurrencyRepository(@NonNull Context context) {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
         availableCurrencies.put("USD", Currency.create("$", "USD", context.getString(R.string.usd)));
         availableCurrencies.put("EUR", Currency.create("E", "EUR", context.getString(R.string.eur)));
@@ -49,7 +49,7 @@ class CurrencyRepository implements ICurrencyRepository {
     public Observable<Currency> currency() {
         return Observable.create(emitter -> {
             SharedPreferences.OnSharedPreferenceChangeListener listener = (prefs, key) -> {
-                if (!emitter.isDisposed()) {
+                if (!emitter.isDisposed() && KEY_CURRENCY.equals(key)) {
                     emitter.onNext(availableCurrencies.get(prefs.getString(key, "USD")));
                 }
             };

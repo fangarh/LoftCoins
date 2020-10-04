@@ -24,6 +24,7 @@ public class PriceFormatter implements Formatter<Double> {
     static {
         LOCALES.put("RUB", new Locale("ru", "RU"));
         LOCALES.put("EUR", Locale.GERMANY);
+       // LOCALES.put("USD", Locale.US);
     }
 
     private final Context context;
